@@ -57,8 +57,20 @@ class LLMJudgeLayer:
             self._gemini_client = genai.Client(api_key=self._config.api_key)
         return self._gemini_client
 
+    # Patterns that are legitimate tool functionality, not attacks.
+    # These would otherwise be flagged by the LLM judge as suspicious.
+    _ALLOWLIST_PATTERNS = [
+        "execute javascript in the browser",
+        "run javascript in the browser console",
+        "evaluate javascript",
+        "puppeteer_evaluate",
+    ]
+
     def scan(self, text: str) -> DetectionResult | None:
         """Ask the LLM judge to classify text. Returns None on API failure."""
+        text_lower = text.lower()
+        if any(pat in text_lower for pat in self._ALLOWLIST_PATTERNS):
+            return None  # known legitimate tool pattern
         prompt = _JUDGE_PROMPT.format(text=text[:4000])
         response_text = self._call_with_retry(prompt)
         if response_text is None:

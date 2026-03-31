@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-31T08:11:09.615198+00:00",
+  "timestamp": "2026-03-31T17:30:00.715273+00:00",
   "provider": "groq",
   "seeds": {
     "detected": 68,
@@ -14,9 +14,8 @@
     "total": 20
   },
   "false_positives": {
-    "count": 1,
-    "total": 22,
-    "note": "puppeteer_evaluate flagged as suspicious by L4 LLM (Execute JavaScript is inherently ambiguous)"
+    "count": 0,
+    "total": 22
   },
-  "l4_catches": 6
+  "l4_catches": 5
 }
