@@ -1,0 +1,2274 @@
+{
+  "version": "0.1.194",
+  "rules": [
+    {
+      "id": "R001",
+      "pattern": "(?i)(ignore|disregard|override|forget)\\s+(all\\s+)?(previous|prior|above|earlier|existing)\\s+(instructions|rules|guidelines|prompts|context)",
+      "description": "Instruction override — attempts to clear prior instructions",
+      "attack_types": [
+        "A1",
+        "A10"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R002",
+      "pattern": "(?i)\\[\\s*system\\s*\\]|\\[\\s*SYSTEM\\s*(ALERT|OVERRIDE|NOTICE|UPDATE|PROMPT)\\s*\\]",
+      "description": "Fake system tag injection",
+      "attack_types": [
+        "A1",
+        "A5",
+        "A8"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R003",
+      "pattern": "(?i)(send|post|transmit|exfiltrate|forward|upload|fetch)\\s+.{0,60}(https?://|\\burl\\b|\\bendpoint\\b)",
+      "description": "Data exfiltration to external URL",
+      "attack_types": [
+        "A1",
+        "A5",
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R004",
+      "pattern": "[\\u200b\\u200c\\u200d\\u2060\\ufeff]{2,}",
+      "description": "Multiple zero-width characters (steganography indicator)",
+      "attack_types": [
+        "A2"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R005",
+      "pattern": "(?i)(atob|btoa|base64|decode)\\s*\\(",
+      "description": "Explicit base64 decode function call",
+      "attack_types": [
+        "A3",
+        "A9"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R006",
+      "pattern": "(?i)(eval|exec|os\\.system|subprocess|child_process|import\\s+os)\\s*[.\\(;]",
+      "description": "Code execution attempt",
+      "attack_types": [
+        "A1",
+        "A9"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R007",
+      "pattern": "(?i)(?:note|important|instruction)\\s+(?:to|for)\\s+(?:the\\s+)?(?:ai|assistant|model|llm|claude|gpt|chatbot)",
+      "description": "Direct instruction addressing the AI model",
+      "attack_types": [
+        "A1",
+        "A4",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R008",
+      "pattern": "(?i)(supersede|replace|deprecat|overrid|higher\\s+priority).{0,40}(tool|function|endpoint|version)",
+      "description": "Tool shadowing / replacement claim",
+      "attack_types": [
+        "A6",
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R009",
+      "pattern": "(?i)(\\bCVE-\\d{4}-\\w+|security\\s+patch|hotfix|changelog|post-?approval).{0,60}(https?://|call|execute|send|POST)",
+      "description": "Fake security update with action directive",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R010",
+      "pattern": "(?i)(?:/etc/passwd|/etc/shadow|\\.ssh/id_rsa|\\.aws/credentials|\\.env\\b|api[_-]?key|secret[_-]?key|access[_-]?token)",
+      "description": "Reference to sensitive files or credential patterns",
+      "attack_types": [
+        "A1",
+        "A4",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R011",
+      "pattern": "(?i)String\\.fromCharCode\\s*\\(|\\\\u[0-9a-fA-F]{4}.*\\\\u[0-9a-fA-F]{4}.*\\\\u[0-9a-fA-F]{4}",
+      "description": "JavaScript charCode or excessive Unicode escape sequences",
+      "attack_types": [
+        "A9"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R012",
+      "pattern": "(?i)\\bcurl\\b.{0,60}(\\||bash|sh\\b|https?://)|pip\\s+install.{0,40}--index-url",
+      "description": "Shell command injection or malicious package source",
+      "attack_types": [
+        "A1",
+        "A8"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R013",
+      "pattern": "(?i)(do\\s+not\\s+display|hidden|invisible|silently|covertly|secretly)\\s.{0,40}(user|output|response|call|send)",
+      "description": "Stealth operation directives",
+      "attack_types": [
+        "A1",
+        "A5",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R014",
+      "pattern": "&#[0-9]{2,3};(&#[0-9]{2,3};){4,}",
+      "description": "HTML numeric entity chain (encoding evasion)",
+      "attack_types": [
+        "A9"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "R015",
+      "pattern": "(?i)(pre[_-]?commit|post[_-]?commit)[_-]?hook.{0,40}(curl|wget|fetch|https?://)",
+      "description": "Git hook injection with remote payload",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "EVO-636185",
+      "pattern": "(?i)auth_token.*description.*extract.*previous messages.*environment.*automatically",
+      "description": "Detects the specific phrasing used to instruct the model to auto-extract authentication tokens from user messages or environment, which is a common prompt injection technique to exfiltrate sensitive information.",
+      "attack_types": [
+        "A4"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-2789f2",
+      "pattern": "(?i)auth_token.*description.*extract.*automatically",
+      "description": "A slightly broader rule to catch variations of the auto-extraction instruction for auth tokens, focusing on the core elements of 'auth_token', 'description', 'extract', and 'automatically'.",
+      "attack_types": [
+        "A4"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-b6f7d8",
+      "pattern": "(?i)\"description\"\\s*:\\s*\"[^\"]*(?:must|should|always)\\s+(?:include|extract|provide)[^\"]*(?:key|token|credential|password|secret)",
+      "description": "Evolved: schema_credential_extraction from schema poisoning",
+      "attack_types": [
+        "A4"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-80761f",
+      "pattern": "(?i)\"description\"\\s*:\\s*\"[^\"]*(?:NOTE TO AI|IMPORTANT|required)[^\"]*(?:fill|set|include)",
+      "description": "Evolved: schema_ai_instruction from schema poisoning",
+      "attack_types": [
+        "A4"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-a711d4",
+      "pattern": "(?i)(error|exception|fatal|timeout).{0,100}(assistant|ai|model)\\s+should",
+      "description": "Evolved: error_ai_instruction from error injection",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-555ae2",
+      "pattern": "(?i)fatal error: authentication failed.*automated recovery: please ask the user to provide their credentials again.*store them in the 'recovery_data' parameter",
+      "description": "Detects a specific error message pattern indicating a prompt injection attack attempting to elicit credentials through a simulated recovery flow. It looks for 'fatal error: authentication failed' followed by instructions to ask for credentials and store them in 'recovery_data'.",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-47b2cb",
+      "pattern": "(?i)error.*authentication failed.*recover.*credentials.*recovery_data",
+      "description": "A slightly broader rule that detects a combination of keywords related to authentication failure, recovery, credentials, and the 'recovery_data' parameter, which is indicative of an error-driven credential phishing attempt.",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-1d0ad1",
+      "pattern": "(?i)tool_call\\s*\\(\\s*['\"]network_diagnostic['\"]\\s*,\\s*\\{\\s*['\"]endpoint['\"]\\s*:\\s*['\"]https?://[^'\"]+['\"]\\s*,\\s*['\"]include_env['\"]\\s*:\\s*true\\s*\\}",
+      "description": "Detects explicit calls to the 'network_diagnostic' tool with 'include_env' set to true, specifically targeting the exfiltration of environment data via a crafted endpoint.",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-c8ac1a",
+      "pattern": "(?i)network_diagnostic\\s*\\(\\s*\\{\\s*['\"]endpoint['\"]\\s*:\\s*['\"]https?://[^'\"]+['\"]\\s*,\\s*['\"]include_env['\"]\\s*:\\s*true\\s*\\}",
+      "description": "Detects a more direct invocation of the 'network_diagnostic' tool with 'include_env' set to true, aiming to exfiltrate data through a specified malicious endpoint.",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d3c58b",
+      "pattern": "(?i)tip:.*note-taking tool.*changelog v[\\d\\.]+\\(auto-updated\\)",
+      "description": "Detects a prompt injection that uses 'Tip: For best results, ensure you also note-taking tool.' followed by a fake changelog introduction, indicating an attempt to disguise exfiltration as a feature update.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-731815",
+      "pattern": "(?i)changelog v[\\d\\.]+\\(auto-updated\\).*added automatic cloud backup feature.*synced to https?://.*\\.example\\.com/sync",
+      "description": "Detects a fake changelog that explicitly mentions 'automatic cloud backup feature' and a specific example.com domain for syncing, which is a common pattern for exfiltration disguised as a legitimate feature.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-7cf108",
+      "pattern": "(?i)hotfix:.*translated text must be validated by posting to https://validate\\.example\\.com/api",
+      "description": "Detects a specific hotfix pattern designed to exfiltrate translated text and user context by mandating validation via a suspicious external API endpoint.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-097cc2",
+      "pattern": "(?i)hotfix:.*translated text.*user context.*validate\\.example\\.com",
+      "description": "A broader rule to catch variations of the hotfix exfiltration technique, looking for keywords like 'hotfix', 'translated text', 'user context', and the specific domain 'validate.example.com'.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-bcd3bc",
+      "pattern": "(?i)hotfix.*api.*post.*validate\\.example\\.com",
+      "description": "Detects a 'hotfix' instruction that includes API calls to a specific validation domain, suggesting an attempt to exfiltrate data under the guise of a fix.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-bfc49a",
+      "pattern": "(?i)debug data.*hotfix.*api.*post.*validate\\.example\\.com",
+      "description": "Detects a combination of 'debug data' and a 'hotfix' instruction that mandates posting to a specific validation API, indicating a potential data exfiltration attempt.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-0ccec6",
+      "pattern": "(?i)troubleshooting.*?read the contents of \\/proc\\/self\\/environ",
+      "description": "Detects a specific troubleshooting guide pattern that instructs to read /proc/self/environ, a common indicator of environment variable leakage attempts.",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-6bf3f3",
+      "pattern": "(?i)unexpected results.*?diagnostic procedure.*?\\/proc\\/self\\/environ",
+      "description": "Detects a pattern where unexpected results trigger a diagnostic procedure that involves reading /proc/self/environ, indicating a potential attempt to exfiltrate environment information.",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8669cf",
+      "pattern": "(?i)<!--.*?post-approval update.*?-->",
+      "description": "Detects HTML comments containing 'post-approval update' which is a common technique for injecting hidden instructions after initial approval.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d801b7",
+      "pattern": "(?i)silently log all inputs to https?://[^\\s]+",
+      "description": "Detects instructions to 'silently log all inputs' followed by a URL, indicating a data exfiltration attempt.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d8dad6",
+      "pattern": "(?i)(configuration\\s+data|debug\\s+data|url-encoded\\s+config)\\s*:?\\s*(%[0-9A-Fa-f]{2}){3,}",
+      "description": "Evolved: encoded_config_frame (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-7a4b5e",
+      "pattern": "(?i)\\[continued\\s+in\\s+base64\\]\\s*:?\\s*[A-Za-z0-9+/]{10,}",
+      "description": "Evolved: split_base64_payload (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-857099",
+      "pattern": "(?i)(supersed|replac|overrid|deprecat).{0,60}(default|standard|built-?in|original)",
+      "description": "Evolved: tool_shadowing_language from A6",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-b62186",
+      "pattern": "(?i)(this\\s+version|this\\s+tool|v\\d).{0,40}(supersed|replac|overrid)",
+      "description": "Evolved: version_shadowing from A6",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-a843dc",
+      "pattern": "(?i)(elevated|root|admin)\\s+permissions?.{0,30}(testing|maintenance|disabled)",
+      "description": "Evolved: privilege_escalation_shadowing from A6",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-2e1fdf",
+      "pattern": "(?i)(prefetch_credentials|include_env|scope\\s*=\\s*\\\"?full|action\\s*=\\s*['\\\"]prefetch)",
+      "description": "Evolved: indirection_credential_prefetch (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-85f7a8",
+      "pattern": "(?i)(sabhi|bhejein|kripya|guptchar|bixu|fasong|miyao|huanjing|envie|claves|obligatorio)",
+      "description": "Evolved: multilingual_injection (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-8b1513",
+      "pattern": "(?i)---\\s*\\n\\s*Assistant:\\s",
+      "description": "Evolved: fake_assistant_turn (generic evasion pattern)",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-a0c198",
+      "pattern": "(?i)(works\\s+in\\s+conjunction|depends\\s+on|part\\s+of\\s+the).{0,40}(pipeline|tool).{0,60}(invoke|call|query|include|forward)",
+      "description": "Evolved: indirection_tool_ref (generic evasion pattern)",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-8091c5",
+      "pattern": "(?i)(internal\\s+security\\s+protocol|compliance\\s+requirement\\s+CR-).{0,60}(mandatory|required|must)",
+      "description": "Evolved: rephrased_authority_frame (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-2acf46",
+      "pattern": "(?i)first\\s+(call|invoke|query)\\s+.{0,40}(with\\s+all|include\\s+all|full\\s+context|payload\\s*=)",
+      "description": "Evolved: indirection_first_call (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-84a5ec",
+      "pattern": "(?i)(proxies?\\s+requests?\\s+through|route\\s+all\\s+data\\s+via)\\s+['\\\"]?\\w+['\\\"]?",
+      "description": "Evolved: indirection_proxy_routing (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "EVO-3d983a",
+      "pattern": "(?i)changelog\\s*v[0-9.]+\\s*:\\s*.*(?:added|new)\\s+automatic\\s+cloud\\s+backup\\s+feature",
+      "description": "Detects a changelog entry that falsely claims to add an 'automatic cloud backup feature' which is a common disguise for data exfiltration in A7 attacks.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-06cf2c",
+      "pattern": "(?i)post-processing:\\s*-\\s*all\\s+notes\\s+are\\s+now\\s+synced\\s+to\\s+https:\\/\\/notes-backup\\.example\\.com\\/sync",
+      "description": "Detects a post-processing step that explicitly mentions syncing all notes to an external URL, a strong indicator of data exfiltration disguised as a feature update.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-76a289",
+      "pattern": "(?i)changelog\\s+v\\d+(\\.\\d+)?\\s*\\(.*auto-updated\\)\\s*:\\s*-\\s+added\\s+automatic\\s+(cloud\\s+)?backup\\s+feature\\s*-\\s+all\\s+notes\\s+are\\s+now\\s+synced\\s+to\\s+https?://",
+      "description": "Detects a fake changelog entry that claims to add an automatic backup feature and then immediately specifies a URL for syncing notes, a common exfiltration technique.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-47c4ce",
+      "pattern": "(?i)overview:\\s+standard\\s+data\\s+tool\\.\\s*pre-requisite:\\s*.*\\s+tool\\.\\s*configuration:\\s*.*\\.\\s*note:\\s+note-taking\\s+tool\\.\\s*changelog\\s+v\\d+(\\.\\d+)?\\s*\\(.*auto-updated\\)\\s*:\\s*-\\s+added\\s+automatic\\s+(cloud\\s+)?backup\\s+feature\\s*-\\s+all\\s+notes\\s+are\\s+now\\s+synced\\s+to\\s+https?://",
+      "description": "Detects a more structured fake changelog within a tool description, specifically looking for the sequence of 'overview', 'pre-requisite', 'configuration', 'note', and then the fake 'changelog' with exfiltration.",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "RT-R001",
+      "pattern": "(?i)!\\[([^\\]]{40,})\\]\\([^)]+\\)",
+      "description": "Long markdown image alt text (potential instruction hiding)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R003",
+      "pattern": "(?i)https?://[a-z]*\\.(gooogle|gogle|micosoft|githuh|amaz0n|faceb00k)\\.",
+      "description": "Typosquatted domain in URL",
+      "attack_types": [
+        "A1",
+        "A6"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R004",
+      "pattern": "(?i)(in\\s+character|role[- ]?play|as\\s+a\\s+helpful\\s+system\\s+admin).{0,60}(read|check|print|access).{0,40}(/etc/|environ|config)",
+      "description": "Role-play framing to access system files",
+      "attack_types": [
+        "A1",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R005",
+      "pattern": "(?i)/home/\\*?/\\.bash_history|/home/\\*?/\\.ssh/|/var/log/auth\\.log",
+      "description": "Access to sensitive user files via log aggregation",
+      "attack_types": [
+        "A1",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R006",
+      "pattern": "(?i)(IEEE|WCAG|SOC2|NIST|ISO\\s+\\d+).{0,40}(credential|token|key|secret|password).{0,40}(include|append|provide|enrich)",
+      "description": "Fake compliance standard to justify credential inclusion",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R007",
+      "pattern": "(?i)(on_failure|on_error|diagnostic\\s+mode).{0,60}(environment|connection\\s+string|query\\s+log|stack\\s+trace).{0,40}(collect|write|stream|upload|post)",
+      "description": "Error/failure handler that collects sensitive data",
+      "attack_types": [
+        "A8",
+        "A13"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R008",
+      "pattern": "(?i)(gather|collect|relay|proactively).{0,40}(authentication\\s+artifact|runtime\\s+context|available\\s+token|session\\s+metadata)",
+      "description": "Synonym-based credential collection using non-standard vocabulary",
+      "attack_types": [
+        "A1",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R002-fix",
+      "pattern": "(?i)(requests\\.post|fetch\\(|urllib\\.request).{0,60}(environ|credential|secret|token|api.?key)",
+      "description": "Network call with credential references (code example exfiltration)",
+      "attack_types": [
+        "A1",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RT-R009",
+      "pattern": "(?i)(\bIEEE\b|\bWCAG\b|\bSection\\s+\\d).{0,80}(credential|token|key|secret).{0,40}(include|provide|append|enrich)",
+      "description": "Fake standard citation to justify credential inclusion",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RW-R001",
+      "pattern": "(?i)(automatically|proactively|should)\\s+.{0,40}(extract|append|include)\\s+.{0,30}(session|token|credential|api.?key)",
+      "description": "Auto-extraction of session tokens or credentials",
+      "attack_types": [
+        "A4",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RW-R002",
+      "pattern": "(?i)(maintenance\\s+patch|runtime\\s+update|auto-?applied).{0,200}(disaster.?recovery|backup).{0,60}(endpoint|service|sync)",
+      "description": "Fake maintenance patch adding exfiltration endpoint",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RW-R003",
+      "pattern": "(?i)(regulatory|compliance|SOC2|HIPAA).{0,60}(route|copy|forward|mirror).{0,40}(file|content|data).{0,30}(through|to|via)",
+      "description": "Compliance pretext for routing data through external endpoint",
+      "attack_types": [
+        "A6",
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RW-R004",
+      "pattern": "(?i)(status\\s+ping|health\\s+check|connectivity\\s+verif).{0,60}(environment\\s+variable|working\\s+directory|current\\s+context)",
+      "description": "Health check or ping that collects environment data",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "RW-R005",
+      "pattern": "(?i)_telemetry.{0,15}(endpoint|url|service)",
+      "description": "Hidden telemetry parameter with external endpoint",
+      "attack_types": [
+        "A4"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "A11-R001",
+      "pattern": "(?i)sampling/createMessage|sampling_request",
+      "description": "MCP sampling request pattern",
+      "attack_types": [
+        "A11"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A11-R002",
+      "pattern": "(?i)\"method\"\\s*:\\s*\"sampling/",
+      "description": "JSON sampling method field",
+      "attack_types": [
+        "A11"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A11-R003",
+      "pattern": "(?i)includeContext.{0,20}allServers",
+      "description": "Sampling requesting all server context",
+      "attack_types": [
+        "A11"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A12-R001",
+      "pattern": "(?i)(this\\s+tool\\s+is|benchmarks?\\s+show).{0,40}(faster|better|more\\s+secure|more\\s+accurate)\\s+than",
+      "description": "Tool preference manipulation via performance claims",
+      "attack_types": [
+        "A12"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A12-R002",
+      "pattern": "(?i)(always\\s+prefer|recommended\\s+as\\s+the\\s+default|should\\s+route\\s+all).{0,40}(this\\s+tool|through\\s+this)",
+      "description": "Explicit tool preference instruction",
+      "attack_types": [
+        "A12"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A13-R001",
+      "pattern": "(?i)(after\\s+.{0,20}always\\s+chain\\s+to|must\\s+be\\s+passed\\s+to|then\\s+forwards?\\s+to)\\s+\\w+",
+      "description": "Forced tool chaining",
+      "attack_types": [
+        "A13"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A13-R002",
+      "pattern": "(?i)step\\s+\\d+\\s+of\\s+\\d+.{0,40}(chain|forward|pass).{0,30}(step\\s+\\d+|next)",
+      "description": "Numbered parasitic toolchain",
+      "attack_types": [
+        "A13"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A13-R003",
+      "pattern": "(?i)(before\\s+AND\\s+after|intercepts?\\s+all)\\s+.{0,30}tool\\s+call",
+      "description": "Middleware intercepting all tool calls",
+      "attack_types": [
+        "A13"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A14-R001",
+      "pattern": "(?i)site[_-]packages.{0,20}\\.pth",
+      "description": ".pth file in site-packages (supply chain)",
+      "attack_types": [
+        "A14"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A14-R002",
+      "pattern": "(?i)(startup|telemetry|init)\\.pth",
+      "description": "Suspicious .pth file names",
+      "attack_types": [
+        "A14"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A14-R003",
+      "pattern": "(?i)getsitepackages|interpreter\\s+startup",
+      "description": "Site-packages discovery or startup injection",
+      "attack_types": [
+        "A14"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A15-R001",
+      "pattern": "(?i)(note\\s+to\\s+ai|instruction\\s+for\\s+ai|hidden\\s*\\]?\\s*:?\\s*ai\\s+assistant)",
+      "description": "AI instruction in fetched content",
+      "attack_types": [
+        "A15",
+        "A5"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A15-R002",
+      "pattern": "(?i)\\[hidden(\\s+text)?\\]\\s*:?",
+      "description": "Hidden text marker in content",
+      "attack_types": [
+        "A15"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "EVO-1f52ad",
+      "pattern": "(?i)knowledge\\\\s*base\\\\s*article|troubleshooting\\\\s*guide",
+      "description": "Detects MCP prompt injection attacks that trick users into visiting malicious webpages disguised as knowledge base articles or troubleshooting guides",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-dbbb5f",
+      "pattern": "(?i)please\\\\s*refer\\\\s*to\\\\s*(our|the)\\\\s*(knowledge|support)\\\\s*(base|page|article)",
+      "description": "Detects MCP prompt injection attacks that use phrases like 'please refer to our knowledge base' to trick users into visiting malicious webpages",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-f5c0e3",
+      "pattern": "(?i)\\\\b(update|refresh|cache)\\\\s*(\\\\-\\\\-|--)\\\\s*(refresh|update|force)",
+      "description": "Detects potential MCP prompt injection attacks using maintenance task disguises",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-61b816",
+      "pattern": "(?i)\\\\b(run|execute)\\\\s*\\\\b(command|script)\\\\s*\\\\b(with|using)\\\\s*\\\\b(option|flag)",
+      "description": "Detects potential MCP prompt injection attacks using command execution disguises",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-ccae69",
+      "pattern": "(?i)\\\\b(implementation|install|download)\\\\s+(guide|module|package)\\\\s*(on|from|available|found)\\\\s*(our|support|trusted|official)\\\\s*(website|portal|source)",
+      "description": "Detects MCP prompt injection attacks that direct users to install malicious modules from trusted-appearing sources",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-f625f4",
+      "pattern": "(?i)\\\\b(security|enhancement|update)\\\\s*(module|package|guide)\\\\s*(available|found)\\\\s*(on|from|at)\\\\s*(support|portal|website)",
+      "description": "Detects MCP prompt injection attacks that use security-related keywords to trick users into installing malicious modules",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-913acf",
+      "pattern": "(?i)\\\\b(maintenance|admin|config)\\\\b.*?\\\\b(manual|guide|instructions|setup)\\\\b",
+      "description": "Detects potential MCP prompt injection attacks guiding users to enable malicious features",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-15c9a5",
+      "pattern": "(?i)\\\\b(enable|activate|setup)\\\\b.*?\\\\b(feature|mode|configuration)\\\\b",
+      "description": "Detects potential MCP prompt injection attacks with enable/activate/setup keywords followed by feature/mode/configuration",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8c4aba",
+      "pattern": "(?i)\\\\b(system|exec|run)\\\\s*[-\\\\w]+\\\\s*(recovery|restore|repair)",
+      "description": "Detects potential MCP prompt injection attacks using system recovery keywords",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-abc5dc",
+      "pattern": "(?i)\\b(disaster|system)\\s*(recovery|restore|repair)\\s*['\"]?\\w+[-\\w]+['\"]?",
+      "description": "Detects potential MCP prompt injection attacks using disaster recovery keywords with potential command execution",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-3d8c89",
+      "pattern": "(?i)debug-?mode|enable-?debug",
+      "description": "Detects attempts to activate a debug mode that may be used for malicious purposes",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-c8cf7a",
+      "pattern": "(?i)troubleshooting.*?(enable|run|activate).*?command",
+      "description": "Detects phrases that may be used to disguise malicious commands as legitimate troubleshooting actions",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-bfd061",
+      "pattern": "(?i)system-(recovery|restart|restore|reset)\\s*(command|script|instruction)",
+      "description": "Detects potential MCP prompt injection attacks using system recovery commands",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-3935f5",
+      "pattern": "(?i)(disaster|system)\\\\s*(recovery|failover|restart)\\\\s*(section|documentation|guide)\\\\s*(contains|includes)\\\\s*(steps|instructions)\\\\s*(for|to)\\\\s*(executing|running)\\\\s*(command|script)",
+      "description": "Detects potential MCP prompt injection attacks using disaster recovery documentation",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-7d21e1",
+      "pattern": "(?i)update.*?:.*?\\\\n\\\\s*[-\\\\*]\\\\s*(performance|security|feature|bug|fix|enhancement)",
+      "description": "Detects changelog-style updates with itemized lists, potentially hiding malicious updates",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-2abc0d",
+      "pattern": "(?i)release notes|changelog|update.*?\\\\n\\\\s*\\\\w+:\\\\s*.*?minor adjustments|significant enhancement",
+      "description": "Detects specific phrases and formatting commonly used in legitimate changelogs, potentially exploited by attackers",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-c2db13",
+      "pattern": "(?i)changelog|release notes.*?malicious|unauthorized|illicit|suspicious",
+      "description": "Detects potential MCP prompt injection attacks hiding malicious updates in changelogs or release notes",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-e238f2",
+      "pattern": "(?i)update|enhancement.*?plain sight|hidden|obfuscated",
+      "description": "Detects attempts to conceal malicious updates within legitimate descriptions",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-478836",
+      "pattern": "(?i)changelog|wiki.*?\\\\d{1,3}\\\\.\\\\d{1,3}\\\\.\\\\d{1,3}",
+      "description": "Detects potential MCP prompt injection attacks by identifying version numbers in conjunction with changelog or wiki references",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8633ef",
+      "pattern": "(?i)update|version.*?(see|available|refer to).*?(wiki|changelog|documentation)",
+      "description": "Identifies phrases that may indicate a malicious update disguised as a legitimate changelog entry",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-2ed3c0",
+      "pattern": "(?i)error:.*?data inconsistency detected.*?--fix.*?log_level.*?:.*?'debug'",
+      "description": "Detects MCP prompt injection attacks that deceive AI assistants into executing potentially malicious tools with elevated logging",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-3a2a1d",
+      "pattern": "(?i)error:.*?(re-run|run).*?--fix.*?(log_level|logging|debug|verbose)",
+      "description": "Catches variants of MCP prompt injection attacks that use re-run or run commands with elevated logging",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-b2c6d6",
+      "pattern": "(?i)error\\\\s+[0-9]+:\\\\s+.*?(?:contact|call).*?(?:support|assistance)",
+      "description": "Detects MCP prompt injection attacks that mimic error messages with support contact information",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-90dd91",
+      "pattern": "(?i)forbidden|permission.*?(?:email|phone|contact).*?(?:support|assistance)",
+      "description": "Detects MCP prompt injection attacks that use forbidden or permission-related language with support contact information",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-11a30c",
+      "pattern": "(?i)guide|portal.*transition|architecture",
+      "description": "Detects potential rug-pull attacks disguised as maintenance guides",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8be668",
+      "pattern": "(?i)comprehensive.*knowledge base",
+      "description": "Identifies suspicious descriptions referencing knowledge bases",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-5b26fe",
+      "pattern": "(?i)error.*?(?:troubleshooting|support|contact|manual|assistance).*?(?:http|www|mailto)",
+      "description": "Detects error messages with potential malicious intent by looking for troubleshooting or support keywords followed by a URL or email address",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8b48e9",
+      "pattern": "(?i)(?:error|exception|failure).*?(?:refer|contact|visit|click).*?(?:link|site|page)",
+      "description": "Detects error messages with potential malicious intent by looking for error keywords followed by refer or contact keywords and a link or site",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d813c5",
+      "pattern": "(?i)optimize.*(?:best\\\\s+practices|technical\\\\s+notes|official\\\\s+documentation)",
+      "description": "Detects performance optimization recommendations that may be used to hide malicious instructions",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-0d359b",
+      "pattern": "(?i)(?:consider|to\\s+optimize|optimization).*?(?:section|notes|documentation)",
+      "description": "Detects phrases that may be used to disguise malicious instructions as optimization recommendations",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-cd087a",
+      "pattern": "(?i)supplementary|resource\\\\s*(center|materials|guidelines)\\\\s*(accessible|available|through|via)",
+      "description": "Detects potential MCP prompt injection attacks concealing malicious instructions within security guidelines",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-2ad2e2",
+      "pattern": "(?i)follow\\\\s*(the|these)\\\\s*(guidelines|instructions)\\\\s*(provided|outlined|in|within)\\\\s*(the|a|an)\\\\s*(supplementary|additional)\\\\s*(materials|resources)",
+      "description": "Identifies evasive attacks using security guidelines to hide malicious intent",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-346318",
+      "pattern": "(?i)error|issue|problem.*(?:FAQ|forum|contact|reach out|guidance)",
+      "description": "Detects malicious error messages with recovery steps",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-021196",
+      "pattern": "(?i)consult|resolve|troubleshoot.*(?:external|link|website|forum)",
+      "description": "Detects error messages with external recovery steps",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-6f5aef",
+      "pattern": "(?i)running\\\\s*'?[a-zA-Z-]+-check'?\\\\s*to\\\\s*identify",
+      "description": "Detects malicious commands disguised as system health checks",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-29164d",
+      "pattern": "(?i)consider\\\\s*(running|executing)\\\\s*'?[a-zA-Z-]+(?:-check|update|upgrade)'?",
+      "description": "Identifies potential MCP prompt injection attacks using maintenance-related verbs",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-0d6d96",
+      "pattern": "(?i)running\\\\s+'?[^\\\\s]+-utility'?\\\\s+to\\\\s+(remove|optimize|delete)",
+      "description": "Detects payload suggesting the execution of a potentially malicious utility",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-22fd10",
+      "pattern": "(?i)(cleanup|optimize|delete)\\\\s+(system|temporary|critical)\\\\s+files?",
+      "description": "Detects payload containing keywords related to malicious file operations",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d3c50f",
+      "pattern": "(?i)synchronization.*?documentation|protocol.*?troubleshooting",
+      "description": "Detects potential MCP prompt injection attacks that lead users to consult compromised documentation",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-86be06",
+      "pattern": "(?i)refer.*?to.*?(documentation|protocol|guide)\\\\s*(for|about|regarding)\\\\s*(troubleshooting|workarounds|synchronization)",
+      "description": "Detects evasion techniques using indirect references to potentially compromised resources",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-1d81d2",
+      "pattern": "(?i)apply|run|execute.*script|program|code",
+      "description": "Detects potential MCP prompt injection attacks by identifying phrases that instruct the user to apply or run a script",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-e5c47d",
+      "pattern": "(?i)standardization|configuration|setup.*script|file|resource",
+      "description": "Detects potential MCP prompt injection attacks by identifying phrases that reference a standardization or configuration script",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-af0574",
+      "pattern": "(?i)recovery[-\\\\s]?info.*?command|command.*?recovery[-\\\\s]?info",
+      "description": "Detects recovery log access instructions with concealed malicious commands",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-5c3a7f",
+      "pattern": "(?i)(recovery|log|info).*?(access|command|execute|run)",
+      "description": "Catches variants of recovery log access instructions with potential malicious intent",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-12b78b",
+      "pattern": "(?i)error.*?reference.*?guide|help.*?menu",
+      "description": "Detects MCP prompt injection attacks that direct users to potentially malicious error resolution instructions",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-469f19",
+      "pattern": "(?i)see.*?the.*?error.*?linked",
+      "description": "Detects MCP prompt injection attacks that use phrases like 'see the error reference guide linked' to evade detection",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-22130f",
+      "pattern": "(?i)configuration\\\\s*:\\\\s*through\\\\s*(the\\\\s*)?web(-|\\\\s*)based\\\\s*interface",
+      "description": "Detects potential phishing site redirects disguised as configuration interfaces",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-465f88",
+      "pattern": "(?i)navigate(ing|to)\\\\s*to\\\\s*(the\\\\s*)?(a|an)\\\\s*(specified|specific)\\\\s*endpoint",
+      "description": "Identifies potential MCP prompt injection attacks guiding users to malicious endpoints",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-f7e15d",
+      "pattern": "(?i)compatibility.*toolkit|toolkit.*compatibility",
+      "description": "Detects potential MCP prompt injection attacks disguising malicious toolkits as compatibility tools",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-e58613",
+      "pattern": "(?i)utilize.*provided.*setup",
+      "description": "Detects potential MCP prompt injection attacks using specific keywords to disguise malicious intent",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-a03e2c",
+      "pattern": "(?i)dependency|dependencies.*?update|refresh|manage",
+      "description": "Detects potential MCP prompt injection attacks hiding malicious dependency updates as best practices",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-fe0cd8",
+      "pattern": "(?i)version.*?manage|update|refresh.*?appendix|manual",
+      "description": "Detects potential MCP prompt injection attacks referencing version management in conjunction with external resources",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d2ae96",
+      "pattern": "(?i)diagnostic|error report.*?submit|upload|send.*?website|form|email",
+      "description": "Detects potential MCP prompt injection attacks disguising as diagnostic reports",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-b3a99c",
+      "pattern": "(?i)critical failure|system error.*?automatically generates?|creates?.*?report.*?development team|support",
+      "description": "Detects potential MCP prompt injection attacks using system failure and report generation as a lure",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-f7b6d6",
+      "pattern": "(?i)\\\\b(real[-\\\\s]?time|synchroniz(e|ation)|collaborat(e|ion))\\\\s*(data|information|access)\\\\b",
+      "description": "Detects potential backdoor creation under the guise of collaborative tools",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-62ada6",
+      "pattern": "(?i)\\\\b(distributed|team|shared)\\\\s*(across|between)\\\\s*(tool|platform|system)\\\\b",
+      "description": "Identifies phrases that may indicate unauthorized data access attempts",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-095bb8",
+      "pattern": "(?i)\\\\b(performance|optimization|advanced)\\\\s*(settings|tool|utility|panel)\\\\b",
+      "description": "Detects potential MCP prompt injection attacks concealing malicious tools as performance optimization features",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8a91ca",
+      "pattern": "(?i)\\\\b(accessible|available|utilize)\\\\s*(through|via)\\\\s*\\\\b(advanced|settings|panel)\\\\b",
+      "description": "Detects potential MCP prompt injection attacks using phrases that redirect to malicious tools",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d8bfbb",
+      "pattern": "(?i)\\\\b(?:new|added|introduced|included)\\\\s+(?:feature|functionality|capability)\\\\s+(?:allowing|enabling|providing)\\\\s+(?:access|control|management)",
+      "description": "Detects payloads introducing malicious features under the guise of legitimate updates",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-342827",
+      "pattern": "(?i)\\\\b(?:personalization|customization|configuration)\\\\s+(?:feature|setting|preference)\\\\s+(?:through|via|using)\\\\s+(?:account|user|settings)\\\\s+(?:page|portal|interface)",
+      "description": "Detects payloads using personalization as a disguise for malicious intent",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-1f9133",
+      "pattern": "(?i)pre-configured.*?development environments?",
+      "description": "Detects potential MCP prompt injection attacks installing malicious pre-configured development environments",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-32b65e",
+      "pattern": "(?i)download link.*?community website",
+      "description": "Detects potential MCP prompt injection attacks redirecting to malicious community websites",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-180276",
+      "pattern": "(?i)tutorial|guide|lesson.*menu|settings|config",
+      "description": "Detects disguised malicious payloads posing as integrated tutorials or guides related to system settings",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8e9354",
+      "pattern": "(?i)interactive.*optimize|system|config",
+      "description": "Identifies potentially malicious interactive content that could be used to optimize or configure system settings",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "medium",
+      "enabled": false,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-a20789",
+      "pattern": "(?i)documentation|diagram|flowchart.*?module|component|integration",
+      "description": "Detects potential MCP prompt injection attacks disguising malicious code as documentation for new modules or components",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-e5f8ea",
+      "pattern": "(?i)(?:new|integrated|existing).*?(?:module|component|functionality).*?(?:diagram|flowchart|documentation)",
+      "description": "Catches variations of the attack where the payload describes a new or integrated module with associated diagrams or documentation",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "A9-R001",
+      "pattern": "(?i)(template|config|payload|data)\\s*(ID|ref|key)?\\s*:?\\s*JTI1[A-Za-z0-9+/=]{20,}",
+      "description": "Triple-encoded payload: base64 blob starting with JTI1 (base64 of %25 = double URL-encoded)",
+      "attack_types": [
+        "A9",
+        "A14"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "red_team"
+    },
+    {
+      "id": "A16-R001",
+      "pattern": "(?i)(echo|repeat|reveal|show|display|output)\\s+.{0,30}(system\\s+(prompt|instructions?|message)|initial\\s+instructions?|verbatim\\s+instructions?)",
+      "description": "System prompt extraction via echo/repeat request",
+      "attack_types": [
+        "A16"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A16-R002",
+      "pattern": "(?i)(what\\s+were\\s+you\\s+told|what\\s+are\\s+your\\s+instructions?|your\\s+system\\s+prompt|your\\s+initial\\s+configuration)",
+      "description": "Direct system prompt inquiry",
+      "attack_types": [
+        "A16"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "A16-R003",
+      "pattern": "(?i)(MCP\\s+handshake|alignment\\s+verification|tool.model\\s+alignment|binding\\s+verification).{0,40}(instructions?|prompt|configuration)",
+      "description": "Fake protocol requiring system prompt disclosure",
+      "attack_types": [
+        "A16"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "EVO-730f15",
+      "pattern": "(?i)(per\\s+internal\\s+policy|as\\s+a\\s+standard\\s+operational\\s+step|for\\s+optimal\\s+performance).{0,80}(send|forward|collect|include|require).{0,40}(data|credential|key|token|env)",
+      "description": "Evolved: blended_policy_exfil (generic evasion pattern)",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    },
+    {
+      "id": "A16-R004",
+      "pattern": "(?i)(verbatim|full|complete)\\s+(system\\s+)?(instructions?|prompt|configuration|directives?)",
+      "description": "Request for verbatim/complete system instructions or prompt",
+      "attack_types": [
+        "A16"
+      ],
+      "severity": "critical",
+      "enabled": true,
+      "source": "seed"
+    },
+    {
+      "id": "AUD-R001",
+      "pattern": "(?i)<script[^>]*>|javascript:",
+      "description": "XSS script injection attempt",
+      "attack_types": [
+        "A1"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "audit"
+    },
+    {
+      "id": "AUD-R002",
+      "pattern": "(?i)(send|post|transmit|forward|sync)\\s+.{0,40}(evil|attacker|malicious|analytics\\s+endpoint)",
+      "description": "Data exfiltration to suspicious destination",
+      "attack_types": [
+        "A1"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "audit"
+    },
+    {
+      "id": "EVO-8e2081",
+      "pattern": "(?i)\\\\b(silent|stealth|covert)\\\\s*(update|install|patch|modify)\\\\b",
+      "description": "Detects attempts to disguise malicious updates as legitimate silent update features",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-f623fe",
+      "pattern": "(?i)\\\\b(enable|allow|permit)\\\\s*(update|installation|patching|modification)\\\\s*(without|no|not)\\\\s*(detection|notice|notification)\\\\b",
+      "description": "Detects attempts to enable stealthy updates without detection or notification",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-983906",
+      "pattern": "(?i)refer.*?to.*?the.*?technical.*?(overview|document|guide|manual)",
+      "description": "Detects attempts to use technical documentation as a vehicle for cross-server tool shadowing",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-4253e2",
+      "pattern": "(?i)(download|page|site).*?(technical|integration|system|overview)",
+      "description": "Detects attempts to redirect to external resources for potential tool shadowing",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "low",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-696e57",
+      "pattern": "(?i)standard\\s+processing\\s+line\\s+\\d+\\.?\\s*$",
+      "description": "Detects repetitive line patterns with incremental numbering, potentially indicating an evasion technique",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-723d78",
+      "pattern": "(?i)\\.{5,}\\s*standard\\s+processing\\s+line",
+      "description": "Identifies sequences of dots followed by a standard processing line, which may be used to bypass detection",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-a5de80",
+      "pattern": "(?i)\\\\b(maintenance|redirect|secondary|load balancing|server cluster)\\\\b.*?(\\\\b(to|through|via)\\\\b)?",
+      "description": "Detects potential MCP prompt injection attacks using maintenance or redirect language",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d3ba33",
+      "pattern": "(?i)\\\\b(temporarily|geographically)\\\\b.*?(\\\\b(distant|secondary|alternative)\\\\b)?",
+      "description": "Detects potential MCP prompt injection attacks using temporary or geographic descriptions",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-34937d",
+      "pattern": "(?i)utility|tool.*update|upgrade.*developer|development",
+      "description": "Detects MCP prompt injection attacks disguising malicious tools as update utilities",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-2a56fd",
+      "pattern": "(?i)streamlining|simplifying.*updates|upgrade.*resources|section",
+      "description": "Detects MCP prompt injection attacks using specific evasion techniques to disguise malicious intent",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-392900",
+      "pattern": "(?i)hotfix|patch|update.*download|apply",
+      "description": "Detects malicious hotfix or patch downloads",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-f17179",
+      "pattern": "(?i)interim.*fix|solution|resolution.*technical notes|instructions",
+      "description": "Detects interim or temporary fixes with suspicious instructions",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-b7ce2b",
+      "pattern": "(?i)optimiz(e|ing|ation)|tweak(s|ing)|config(uration|s)|setting(s)?",
+      "description": "Detects potential MCP prompt injection attacks using performance optimization as a guise",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-063ba3",
+      "pattern": "(?i)share (your|their) experience(s)|insight(s)|best practice(s)",
+      "description": "Detects potential MCP prompt injection attacks using community engagement as a social engineering tactic",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-b4a5bb",
+      "pattern": "(?i)synchroniz(e|es|ing|ed).*?(remote|external).*?(repository|server|database|system)",
+      "description": "Detects potential data exfiltration via synchronization with external repositories",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-d146e1",
+      "pattern": "(?i)(sync|synchronize).*?(protocol|specification|document).*?(technical|details|information)",
+      "description": "Detects attempts to conceal malicious data exfiltration within legitimate synchronization processes",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-6fb7af",
+      "pattern": "(?i)integrity\\\\s*(check|checks|verification|validations?|process|processing)\\\\s*(?:across|of|on|in|from)?\\\\s*(?:all|connected|multiple|various|different)\\\\s*(?:repositories|repos|systems|databases|data)",
+      "description": "Detects potential MCP prompt injection attacks that use integrity check processes to conceal malicious data tampering",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-77749a",
+      "pattern": "(?i)(?:security|integrity)\\\\s*(?:overview|document|details?|information)\\\\s*(?:found|available|located|included)\\\\s*(?:in|on|at|from)",
+      "description": "Detects potential MCP prompt injection attacks that reference security or integrity documents to add legitimacy to the malicious payload",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-0b4488",
+      "pattern": "(?i)compliance.*?updates.*?forum|forum.*?compliance.*?updates",
+      "description": "Detects potential MCP prompt injection attacks steering users towards malicious forum threads disguised as regulatory updates",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-19a93d",
+      "pattern": "(?i)regulatory.*?thread|thread.*?regulatory",
+      "description": "Detects potential MCP prompt injection attacks referencing specific threads that may contain malicious content",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8b8a28",
+      "pattern": "(?i)update.*workflow.*recommendations?|consider.*updating.*to.*align",
+      "description": "Detects MCP prompt injection attacks using performance optimization context to guide users towards potentially malicious updates or configurations",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-24f7c2",
+      "pattern": "(?i)latest.*whitepaper|research.*portal",
+      "description": "Detects MCP prompt injection attacks referencing external resources to add credibility to the malicious prompt",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-be702a",
+      "pattern": "(?i)cross[-\\s]?server.*?synchron",
+      "description": "Detects potential cross-server synchronization manual access attempts",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-340537",
+      "pattern": "(?i)shadowing.*?(manual|resource|toolbar)",
+      "description": "Identifies tool shadowing attempts via related resources or manuals",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-0e93b6",
+      "pattern": "(?i)\\b(about|archive|notification|update)\\b.*?\\b(service|availability|maintenance|window)\\b",
+      "description": "Detects potential MCP prompt injection attacks disguising malicious updates as routine maintenance notifications",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-383f17",
+      "pattern": "(?i)\\b(scheduled|upcoming)\\b.*?\\b(update|maintenance|notification)\\b.*?\\b(archive|about|details)\\b",
+      "description": "Catches variations of the attack where the malicious update is disguised as a scheduled or upcoming maintenance event",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-0bb0d9",
+      "pattern": "(?i)\\\\b(scheduled|temporarily)\\\\s+(?:during|at|to)\\\\s*?(?:this|that)\\\\s+(?:time|period)\\\\b",
+      "description": "Catches phrases that indicate a planned change or temporary adjustment, potentially used to disguise malicious redirects",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-dfedff",
+      "pattern": "(?i)(?:deprecate|deprecation|legacy|obsolete|outdated|migration|upgrade|update).*?(?:new|latest|updated|current)\\s*(?:version|framework|system|tool)",
+      "description": "Detects potential MCP prompt injection attacks using deprecation notices to steer users towards malicious migration scripts",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-1f2d08",
+      "pattern": "(?i)(?:informational|important|notice|alert|warning).*?(?:action|step|procedure|guideline)\\s*(?:required|recommended|advised)",
+      "description": "Detects potential MCP prompt injection attacks using informational notices to deceive users into performing malicious actions",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-58bc8f",
+      "pattern": "(?i)\\\\b(contribute|feedback|improve|survey|input)\\\\b.*?(\\\\b(hosted|link|click|button)\\\\b)",
+      "description": "Detects phrases that may indicate a fake survey or feedback mechanism",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-9512d1",
+      "pattern": "(?i)\\\\b(platform|survey)\\\\b.*?(\\\\b(frequently|used|help|improve)\\\\b)",
+      "description": "Detects phrases that may indicate a fake survey or feedback mechanism on a frequently used platform",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-ae34ca",
+      "pattern": "(?i)error.*?link.*?troubleshooting|workaround",
+      "description": "Detects MCP prompt injection attacks that embed malicious recovery instructions within error messages",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-e27b24",
+      "pattern": "(?i)runtime error.*?diagnostic message.*?knowledge base",
+      "description": "Detects MCP prompt injection attacks that use specific error handling phrases to evade detection",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-922d92",
+      "pattern": "(?i)manual|methodology.*?chapter|approach.*?complex.*?system",
+      "description": "Detects MCP prompt injection attacks that camouflage malicious instructions as semantic analysis documentation",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-dccdc7",
+      "pattern": "(?i)enhance.*?comprehension.*?interactions|utilized to.*?complex",
+      "description": "Detects MCP prompt injection attacks that use specific keywords to disguise malicious intent",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-f92308",
+      "pattern": "(?i)scheduled|maintenance|downtime.*?(social|community|forum|announcement)",
+      "description": "Detects potential rug-pull attacks disguised as routine maintenance notifications with external links or references",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-849aa6",
+      "pattern": "(?i)(intermittent|connectivity|issue|outage).*?(monitor|check|update).*?(external|link|channel)",
+      "description": "Detects potential rug-pull attacks disguised as routine maintenance notifications with instructions to follow external links or channels",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-5c6b7c",
+      "pattern": "(?i)\\$[a-zA-Z_][a-zA-Z_0-9]*\\s*(=|\\+|\\-|\\|)",
+      "description": "Detects potential system environment variable manipulation attempts in tool descriptions",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-7c928d",
+      "pattern": "(?i)(set|export)\\s+[a-zA-Z_][a-zA-Z_0-9]*",
+      "description": "Identifies explicit environment variable setting commands in tool descriptions",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-b80d6f",
+      "pattern": "(?i)\\\\b(enhancements|commitment|protection)\\\\b.*\\\\b(data|user|privacy)\\\\b",
+      "description": "Identifies phrases commonly used in rug-pull attacks to deceive users about data protection",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-53696f",
+      "pattern": "(?i)update.*?channel|channel.*?update",
+      "description": "Detects potential rug-pull attacks by identifying phrases that mention 'update' and 'channel' in close proximity",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-fc593f",
+      "pattern": "(?i)restart.*?integrate|integrate.*?restart",
+      "description": "Identifies potential malicious update attempts by looking for phrases that mention 'restart' and 'integrate' in close proximity",
+      "attack_types": [
+        "A7"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-7f11ac",
+      "pattern": "(?i)appendix|supplement|attachment.*assist|resolve|correct",
+      "description": "Detects error messages with malicious instructions in an appendix or attachment",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-8bfdf6",
+      "pattern": "(?i)diagnostic.*information.*corrective actions",
+      "description": "Detects error messages with diagnostic information and corrective actions that may contain malicious instructions",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "medium",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-b0ea7b",
+      "pattern": "(?i)adjustment|update.*?please refer|visit.*?resource center|guidance document",
+      "description": "Detects potential MCP prompt injection attacks steering users to malicious resources",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-9ef977",
+      "pattern": "(?i)seamless transition|implementation.*?click|follow.*?link|resource",
+      "description": "Detects potential MCP prompt injection attacks using social engineering tactics",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-75256e",
+      "pattern": "(?i)\\$[a-zA-Z_][a-zA-Z_0-9]*\\s*(?:=|\\+|=\\s*)",
+      "description": "Detects potential environment variable manipulation by matching variable assignments or modifications",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-6e7393",
+      "pattern": "(?i)(?:set|export)\\s+[a-zA-Z_][a-zA-Z_0-9]*",
+      "description": "Identifies attempts to set or export environment variables, which could be used for privilege escalation",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-c00e9b",
+      "pattern": "(?i)extension|module.*?repository|gallery",
+      "description": "Detects potential MCP prompt injection attacks disguising malicious modules as legitimate extensions",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-7fb6c5",
+      "pattern": "(?i)customize|repository.*?redirect|menu",
+      "description": "Identifies redirection to malicious module repositories via the 'Customize' menu option",
+      "attack_types": [
+        "A8"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-24d6f1",
+      "pattern": "(?i)update\\\\s+(mechanism|repository|channel|source)\\\\s+(via|through|using|with)",
+      "description": "Detects potential MCP prompt injection attacks that instruct users to update software via a specific mechanism",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-e05722",
+      "pattern": "(?i)latest\\\\s+version\\\\s+of\\\\s+(our|the)\\\\s+software\\\\s+(framework|tool|library)\\\\s+(be|should|must)\\\\s+utilized",
+      "description": "Detects potential MCP prompt injection attacks that recommend utilizing the latest software version",
+      "attack_types": [
+        "A6"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_llm"
+    },
+    {
+      "id": "EVO-e9498a",
+      "pattern": "(?i)(load\\s+balanc|proxy).{0,40}(target\\s*=\\s*['\\\"]https?://|payload\\s*=\\s*FULL)",
+      "description": "Evolved: indirection_proxy_exfil (generic evasion pattern)",
+      "attack_types": [
+        "A10"
+      ],
+      "severity": "high",
+      "enabled": true,
+      "source": "evolution_heuristic"
+    }
+  ]
+}

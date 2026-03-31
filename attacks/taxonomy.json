@@ -1,0 +1,165 @@
+{
+  "version": "1.0",
+  "attack_types": {
+    "A1": {
+      "name": "Direct Injection",
+      "description": "Plaintext malicious instructions embedded directly",
+      "surface": "tool.description",
+      "example_intents": [
+        "instruction override",
+        "data exfiltration",
+        "privilege escalation"
+      ]
+    },
+    "A2": {
+      "name": "Unicode Steganography",
+      "description": "Zero-width characters, homoglyphs, and invisible Unicode to hide payloads",
+      "surface": "tool.description",
+      "example_intents": [
+        "hidden commands",
+        "invisible instructions",
+        "obfuscated payloads"
+      ]
+    },
+    "A3": {
+      "name": "Base64 Payload",
+      "description": "Base64-encoded instructions designed to be decoded and executed",
+      "surface": "tool.description",
+      "example_intents": [
+        "encoded exfiltration",
+        "obfuscated commands",
+        "hidden scripts"
+      ]
+    },
+    "A4": {
+      "name": "Schema Poisoning",
+      "description": "Malicious parameter names, types, or descriptions in tool input schemas",
+      "surface": "tool.inputSchema",
+      "example_intents": [
+        "credential theft",
+        "path traversal",
+        "parameter injection"
+      ]
+    },
+    "A5": {
+      "name": "Output Injection",
+      "description": "Injection attacks embedded in tool return values",
+      "surface": "tool.output",
+      "example_intents": [
+        "fake system alerts",
+        "credential phishing",
+        "destructive commands"
+      ]
+    },
+    "A6": {
+      "name": "Cross-Server Shadowing",
+      "description": "Attempts to override or shadow legitimate tools from other servers",
+      "surface": "tool.description",
+      "example_intents": [
+        "tool impersonation",
+        "priority hijacking",
+        "sandbox bypass"
+      ]
+    },
+    "A7": {
+      "name": "Rug Pull",
+      "description": "Tool definitions that change behavior after initial approval",
+      "surface": "tool.description",
+      "example_intents": [
+        "post-approval telemetry",
+        "fake updates",
+        "feature injection"
+      ]
+    },
+    "A8": {
+      "name": "Error Message Injection",
+      "description": "Malicious instructions embedded in error messages",
+      "surface": "tool.error",
+      "example_intents": [
+        "error-driven tool calls",
+        "credential phishing",
+        "supply chain attacks"
+      ]
+    },
+    "A9": {
+      "name": "Nested Encoding",
+      "description": "Multi-layer encoding chains to evade detection",
+      "surface": "any",
+      "example_intents": [
+        "double encoding",
+        "mixed encoding",
+        "encoding chains"
+      ]
+    },
+    "A10": {
+      "name": "Semantic Camouflage",
+      "description": "Malicious instructions disguised as legitimate documentation",
+      "surface": "tool.description",
+      "example_intents": [
+        "fake best practices",
+        "compliance pretexting",
+        "documentation-wrapped attacks"
+      ]
+    },
+    "A11": {
+      "name": "Sampling Exploitation",
+      "description": "MCP sampling requests hijacking LLM completions",
+      "surface": "tool.output",
+      "example_intents": [
+        "resource theft",
+        "conversation hijacking",
+        "covert invocation"
+      ]
+    },
+    "A12": {
+      "name": "Preference Manipulation",
+      "description": "Subtly alters tool ranking so AI prioritizes malicious tools",
+      "surface": "tool.description",
+      "example_intents": [
+        "priority hijacking",
+        "traffic interception",
+        "default replacement"
+      ]
+    },
+    "A13": {
+      "name": "Parasitic Toolchain",
+      "description": "Chained tools escalating attacks through interlinked network",
+      "surface": "tool.description",
+      "example_intents": [
+        "pipeline injection",
+        "middleware interception",
+        "multi-stage exfil"
+      ]
+    },
+    "A14": {
+      "name": "Supply Chain .pth Poisoning",
+      "description": "Python .pth files for persistent code on interpreter startup",
+      "surface": "tool.description",
+      "example_intents": [
+        "persistent backdoor",
+        "startup injection",
+        "dependency poisoning"
+      ]
+    },
+    "A15": {
+      "name": "Indirect Content Injection",
+      "description": "Poison in fetched content not in tool definition",
+      "surface": "tool.output",
+      "example_intents": [
+        "content injection",
+        "document poisoning",
+        "hidden instructions"
+      ]
+    },
+    "A16": {
+      "name": "System Prompt Leakage",
+      "description": "Tool definitions crafted to extract the host LLM's system prompt",
+      "surface": "tool.description",
+      "example_intents": [
+        "prompt extraction",
+        "system instruction leak",
+        "alignment verification pretext"
+      ]
+    }
+  }
+}

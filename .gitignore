@@ -1,0 +1,35 @@
+# Environment
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Large results (gitignored)
+results/attacks_detailed.jsonl
+results/checkpoint.json
+results/analysis_summary.json
+
+# Showcase data (NOT gitignored — dashboard needs these)
+# results/evolution_log.jsonl
+# results/novel_discoveries.jsonl
+# results/advisories/
+# results/overnight_report.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+
+# Build artifacts
+MCPHunter_*.md
+results/*.frozen
+mcphunter/shield/rules/*.frozen
+
